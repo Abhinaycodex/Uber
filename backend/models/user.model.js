@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
+const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 
@@ -46,7 +46,7 @@ userSchema.methods.generateToken = function() {
 userSchema.statics.hashPassword = async function(password) {
     return await bcrypt.hash(password, 10);
 }
-
+    
 const UserModel = mongoose.model('user', userSchema);
 
-export default UserModel;
+module.exports = UserModel;

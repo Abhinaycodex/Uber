@@ -37,10 +37,9 @@ userSchema.methods.matchPassword = async function(enteredPassword) {
     return await bcrypt.compare(enteredPassword, this.password);
 }
 
-userSchema.methods.generateToken = function() {
-    return jwt.sign({id: this._id}, process.env.JWT_SECRET, {
-        expiresIn: process.env.JWT_EXPIRE
-    });
+userSchema.methods.generateToken = function () {
+    const token = jwt.sign({id: this._id}, process.env.JWT_SECRET, {expiresIn: '24h'});
+    return token;
 }
 
 userSchema.statics.hashPassword = async function(password) {

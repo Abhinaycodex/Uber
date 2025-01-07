@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 
+
 const captainSchema = new mongoose.Schema({
     fullname: {
         firstname: {
@@ -18,8 +19,8 @@ const captainSchema = new mongoose.Schema({
         type: String,
         required: true,
         unique: true,
-        lowercase: true,
-        match: [ /^\S+@\S+\.\S+$/, 'Please enter a valid email' ]
+        lowercase: true,    
+        // match: [ /^\S+@\S+\.\S+$/, 'Please enter a valid email' ]
     },
     password: {
         type: String,
@@ -40,7 +41,6 @@ const captainSchema = new mongoose.Schema({
         color: {
             type: String,
             required: true,
-            minlength: [ 3, 'Color must be at least 3 characters long' ],
         },
         plate: {
             type: String,
@@ -70,13 +70,13 @@ const captainSchema = new mongoose.Schema({
 })
 
 
-captainSchema.methods.generateAuthToken = function () {
+captainSchema.methods.generateToken = function () {
     const token = jwt.sign({ _id: this._id }, process.env.JWT_SECRET, { expiresIn: '24h' });
     return token;
 }
 
 
-captainSchema.methods.comparePassword = async function (password) {
+captainSchema.methods.matchPassword = async function (password) {
     return await bcrypt.compare(password, this.password);
 }
 

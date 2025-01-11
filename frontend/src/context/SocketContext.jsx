@@ -4,9 +4,9 @@ import { io } from 'socket.io-client';
 
 export const SocketContext = createContext();
 
-const socket = io(`${import.meta.env.VITE_BASE_URL}`); // Replace with your server URL
+const socket = io(`${import.meta.env.VITE_BASE_URL}`); 
 
-const SocketProvider = ({ children }) => {
+const SocketProvider = ([children]) => {
     useEffect(() => {
         // Basic connection logic
         socket.on('connect', () => {
@@ -27,5 +27,6 @@ const SocketProvider = ({ children }) => {
         </SocketContext.Provider>
     );
 };
+
 
 export default SocketProvider;

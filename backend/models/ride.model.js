@@ -53,6 +53,23 @@ const rideSchema = new mongoose.Schema({
         select: false,
         required: true,
     },
-})
+
+    rating: {
+        type: Number,
+        min: 1,
+        max: 5,
+        default: null
+    },
+    feedback: {
+        type: String,
+        default: ''
+    },
+    feedbackSubmitted: {
+        type: Boolean,
+        default: false
+    }
+}, {
+    timestamps: true
+});
 
 module.exports = mongoose.model('ride', rideSchema);

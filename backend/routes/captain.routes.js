@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 const { body } = require("express-validator");
 const authMiddleware = require('../middleware/auth.middleware');
+const Ride = require('../models/ride.model');
 
 router.post('/register', [
     body('email').isEmail().withMessage('Invalid Email'),
@@ -23,5 +24,43 @@ router.post('/login', [
 router.get('/profile', authMiddleware.authCaptain, captainController.getProfile);
 
 router.get('/logout', authMiddleware.authCaptain, captainController.logoutCaptain);
+
+// Add feedback route
+router.post('/rides/feedback', async (req, res) => {
+    try {
+        const { rideId, rating, feedback } = req.body;
+        
+        // Update the ride with feedback
+        const updatedRide = await Ride.findByIdAndUpdate(
+            rideId,
+            {
+                rating,
+                feedback,
+                feedbackSubmitted: true
+            },
+            { new: true }
+        );
+
+        if (!updatedRide) {
+            return res.status(404).json({
+                success: false,
+                message: 'Ride not found'
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            message: 'Feedback submitted successfully',
+            data: updatedRide
+        });
+    } catch (error) {
+        console.error('Error submitting feedback:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Error submitting feedback',
+            error: error.message
+        });
+    }
+});
 
 module.exports = router;

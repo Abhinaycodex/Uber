@@ -12,7 +12,10 @@ const UserLogin = () => {
   const { user, setUser } = useContext(UserDataContext)
   const navigate = useNavigate()
 
-
+  const handleLogin = () => {
+    // Add login logic here
+    console.log('Login clicked');
+  };
 
   const submitHandler = async (e) => {
     e.preventDefault();

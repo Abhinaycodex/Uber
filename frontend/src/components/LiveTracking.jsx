@@ -1,9 +1,9 @@
-import  { useState, useEffect } from 'react';
-import { LoadScript, GoogleMap, Marker } from '@react-google-maps/api';
+import { useState, useEffect } from "react";
+import { LoadScript, GoogleMap, Marker } from "@react-google-maps/api";
 
 const containerStyle = {
-  width: '100%',
-  height: '100%',
+  width: "100%",
+  height: "100%",
 };
 
 const LiveTracking = () => {
@@ -16,7 +16,7 @@ const LiveTracking = () => {
           const { latitude, longitude } = position.coords;
           setCurrentPosition({ lat: latitude, lng: longitude });
         },
-        (error) => console.error('Error getting location:', error)
+        (error) => console.error("Error getting location:", error)
       );
     };
 
@@ -31,11 +31,13 @@ const LiveTracking = () => {
   }
 
   return (
-    <LoadScript googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}>
-      <GoogleMap mapContainerStyle={containerStyle} center={currentPosition} zoom={15}>
-        <Marker position={currentPosition} />
-      </GoogleMap>
-    </LoadScript>
+    <iframe
+      className="w-full h-full"
+      src={`https://www.google.com/maps/embed/v1/place?key=${
+        import.meta.env.VITE_GOOGLE_MAPS_API
+      }&q=${currentPosition?.latitude},${currentPosition?.longitude}`}
+      frameborder="0"
+    ></iframe>
   );
 };
 

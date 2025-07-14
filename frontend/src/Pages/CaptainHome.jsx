@@ -6,7 +6,7 @@ import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
 import ConfirmRidePopUp from '../components/ConfirmRidePopUp'
 import { useSocket } from '../context/SocketContext'
-import CaptainContext from '../context/CapatainContext'
+import {CaptainDataContext} from '../context/CaptainContext'
 import axios from 'axios'
 
 const CaptainHome = () => {
@@ -20,7 +20,7 @@ const CaptainHome = () => {
     const navigate = useNavigate()
 
     const { socket, isConnected } = useSocket()
-    const { captain } = useContext(CaptainContext)
+    const { captain } = useContext(CaptainDataContext)
 
     // Handle socket connection and location updates
     useEffect(() => {
@@ -102,7 +102,7 @@ const CaptainHome = () => {
 
     // Animation effects
     useGSAP(() => {
-        if (ridePopupPanel) {
+        if (ridePopupPanelRef) {
             gsap.to(ridePopupPanelRef.current, {
                 transform: 'translateY(0)'
             });
@@ -114,7 +114,7 @@ const CaptainHome = () => {
     }, [ridePopupPanel]);
 
     useGSAP(() => {
-        if (confirmRidePopupPanel) {
+        if (confirmRidePopupPanelRef) {
             gsap.to(confirmRidePopupPanelRef.current, {
                 transform: 'translateY(0)'
             });

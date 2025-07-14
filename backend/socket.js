@@ -15,7 +15,7 @@ function initializeSocket(server) {
     });
 
     io.on('connection', (socket) => {
-        console.log(`Client connected: ${socket.id}`);
+        console.log(`Client connected:  ${socket.id}`);
 
         // Handle user/captain joining
         socket.on('join', async (data) => {

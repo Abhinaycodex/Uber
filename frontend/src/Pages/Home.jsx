@@ -256,7 +256,7 @@ const Home = () => {
         src="https://upload.wikimedia.org/wikipedia/commons/c/cc/Uber_logo_2018.png"
         alt=""
       />
-      <div className="h-full top-[3rem] absolute w-full bg-black">
+      <div className="h-full top-[3rem] absolute w-full">
         <LiveTracking />
       </div>
       <div className="flex flex-col justify-end absolute bottom-0 w-full">

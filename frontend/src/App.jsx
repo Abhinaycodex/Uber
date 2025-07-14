@@ -1,19 +1,21 @@
-import { Route, Routes } from 'react-router-dom';
-import Start from './Pages/Start';
-import UserLogin from './Pages/UserLogin';
-import UserSignup from './Pages/UserSignup';
-import CaptainLogin from './Pages/CaptainLogin';
-import CaptainSignup from './Pages/CaptainSignup';
-import Home from './Pages/Home';
-import UserProtectWrapper from './Pages/UserProtectWrapper';
-import UserLogout from './Pages/UserLogout';
-import CaptainHome from './Pages/CaptainHome';
-import CaptainProtectWrapper from './Pages/CaptainProtectWrapper';
-import CaptainLogout from './Pages/CaptainLogout';
-import Riding from './Pages/Riding';
-import CaptainRiding from './Pages/CaptainRiding';
-import 'remixicon/fonts/remixicon.css';
-import { SocketProvider } from './context/SocketContext';
+import { Route, Routes } from "react-router-dom";
+import Start from "./Pages/Start";
+import UserLogin from "./Pages/UserLogin";
+import UserSignup from "./Pages/UserSignup";
+import CaptainLogin from "./Pages/CaptainLogin";
+import CaptainSignup from "./Pages/CaptainSignup";
+import Home from "./Pages/Home";
+import UserProtectWrapper from "./Pages/UserProtectWrapper";
+import UserLogout from "./Pages/UserLogout";
+import CaptainHome from "./Pages/CaptainHome";
+import CaptainProtectWrapper from "./Pages/CaptainProtectWrapper";
+import CaptainLogout from "./Pages/CaptainLogout";
+import Riding from "./Pages/Riding";
+import CaptainRiding from "./Pages/CaptainRiding";
+import "remixicon/fonts/remixicon.css";
+import { SocketProvider } from "./context/SocketContext";
+
+
 
 const App = () => {
   return (
@@ -57,7 +59,7 @@ const App = () => {
           path="/captain-home"
           element={
             <CaptainProtectWrapper>
-              <CaptainHome />
+                <CaptainHome />
             </CaptainProtectWrapper>
           }
         />

@@ -5,6 +5,7 @@ module.exports.getAddressCoordinate = async (address) => {
     const apiKey = process.env.GOOGLE_MAPS_API;
     // const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${apiKey}`;
 
+    const url = 'https://www.openstreetmap.org/copyright'
 
     try {
         const response = await axios.get(url);

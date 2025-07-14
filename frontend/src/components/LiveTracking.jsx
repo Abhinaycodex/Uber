@@ -1,10 +1,7 @@
 import { useState, useEffect } from "react";
 import { LoadScript, GoogleMap, Marker } from "@react-google-maps/api";
 
-const containerStyle = {
-  width: "100%",
-  height: "100%",
-};
+
 
 const LiveTracking = () => {
   const [currentPosition, setCurrentPosition] = useState(null);
@@ -18,11 +15,13 @@ const LiveTracking = () => {
         },
         (error) => console.error("Error getting location:", error)
       );
+      
     };
 
     updatePosition();
     const watchId = navigator.geolocation.watchPosition(updatePosition);
 
+    console.log("API key =", import.meta.env.VITE_GOOGLE_MAPS_API);
     return () => navigator.geolocation.clearWatch(watchId);
   }, []);
 
@@ -32,11 +31,10 @@ const LiveTracking = () => {
 
   return (
     <iframe
+
       className="w-full h-full"
-      src={`https://www.google.com/maps/embed/v1/place?key=${
-        import.meta.env.VITE_GOOGLE_MAPS_API
-      }&q=${currentPosition?.latitude},${currentPosition?.longitude}`}
-      frameborder="0"
+      src={`https://www.google.com/maps/embed/v1/place?key=${import.meta.env.VITE_GOOGLE_MAPS_API}
+      &q=${currentPosition?.latitude},${currentPosition?.longitude}`}
     ></iframe>
   );
 };

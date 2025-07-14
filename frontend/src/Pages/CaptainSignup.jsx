@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { CaptainDataContext } from '../context/CapatainContext'
+import { CaptainDataContext } from '../context/CaptainContext'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
@@ -56,8 +56,8 @@ const CaptainSignup = () => {
     setVehiclePlate('')
     setVehicleCapacity('')
     setVehicleType('')
-
   }
+
   return (
     <div className='py-5 px-5 h-screen flex flex-col justify-between'>
       <div>

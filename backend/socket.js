@@ -17,8 +17,9 @@ function initializeSocket(server) {
     io.on('connection', (socket) => {
         console.log(`Client connected:  ${socket.id}`);
 
-        // Handle user/captain joining
-        socket.on('join', async (data) => {
+        // Handle user/captain joining  
+        // event to join a room based on user type 
+        socket.on('user join', async (data) => {
             try {
                 const { userId, userType } = data;
                 if (!userId || !userType) {

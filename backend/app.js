@@ -1,4 +1,5 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const app = express();
 dotenv.config();
@@ -12,7 +13,15 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-const connectDB = require('./DB/db');
+const connectDB = async (url) => {
+    try {
+        await mongoose.connect(url);
+        
+    } catch (error) {
+        console.error('Error connecting to the database', error);
+        throw error;
+    }
+}
 
 // Connect to database
 connectDB(process.env.MONGO_URI)
@@ -36,4 +45,4 @@ app.use((err, req, res, next) => {
 app.use('/users', userRoutes);
 app.use('/captains', captainRoutes);
 
-module.exports = app; 
+module.exports = app;

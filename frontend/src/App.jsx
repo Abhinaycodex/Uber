@@ -21,8 +21,6 @@ import { SocketProvider } from "./context/SocketContext";
 const App = () => {
   return (
     <SocketProvider>
-      
-    
       <Routes>
         {/* Public Routes */}
         <Route path="/" element={<Start />} />

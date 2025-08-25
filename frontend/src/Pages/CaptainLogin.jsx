@@ -1,87 +1,121 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
-import { useNavigate } from 'react-router-dom'
-import axios from 'axios'
-import { CaptainDataContext } from '../context/CaptainContext'
+import React, { useState, useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { CaptainDataContext } from "../context/CaptainContext";
 
-const Captainlogin = () => {
+const CaptainLogin = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const { setCaptain } = useContext(CaptainDataContext);
+  const navigate = useNavigate();
 
-  const [ email, setEmail ] = useState('')
-  const [ password, setPassword ] = useState('')
-
-  const { captain, setCaptain } = React.useContext(CaptainDataContext)
-  const navigate = useNavigate()
-
-
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    const captain = {
-      email: email,
-      password
+
+    const captain = { email, password };
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_BASE_URL}/captains/login`,
+        captain
+      );
+
+      if (response.status === 200) {
+        const data = response.data;
+        setCaptain(data.captain);
+        localStorage.setItem("token", data.token);
+        navigate("/captain-home");
+      }
+    } catch (err) {
+      console.error(err);
+      setError("Login failed. Please check your credentials.");
+    } finally {
+      setLoading(false);
     }
 
-    const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/captains/login`, captain)
+    setEmail("");
+    setPassword("");
+  };
 
-    if (response.status === 200) {
-      const data = response.data
-
-      setCaptain(data.captain)
-      localStorage.setItem('token', data.token)
-      navigate('/captain-home')
-
-    }
-
-    setEmail('')
-    setPassword('')
-  }
   return (
-    <div className='p-7 h-screen flex flex-col justify-between'>
-      <div>
-        <img className='w-20 mb-3' src="https://www.svgrepo.com/show/505031/uber-driver.svg" alt="" />
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50">
+      {/* Card */}
+      <div className="bg-white shadow-xl rounded-2xl w-full max-w-md p-8">
+        {/* Logo */}
+        <div className="flex justify-center mb-6">
+          <img
+            className="w-20"
+            src="https://www.svgrepo.com/show/505031/uber-driver.svg"
+            alt="Captain Logo"
+          />
+        </div>
 
-        <form onSubmit={(e) => {
-          submitHandler(e)
-        }}>
-          <h3 className='text-lg font-medium mb-2'>Whats your email</h3>
+        {/* Title */}
+        <h2 className="text-2xl font-bold text-center mb-6">Captain Login</h2>
+
+        {/* Error Alert */}
+        {error && (
+          <div className="bg-red-100 text-red-600 p-3 rounded-lg mb-4 text-sm text-center">
+            {error}
+          </div>
+        )}
+
+        {/* Form */}
+        <form onSubmit={submitHandler}>
+          <label className="block mb-2 text-sm font-medium">Email</label>
           <input
             required
             value={email}
-            onChange={(e) => {
-              setEmail(e.target.value)
-            }}
-            className='bg-[#eeeeee] mb-7 rounded-lg px-4 py-2 border w-full text-lg placeholder:text-base'
+            onChange={(e) => setEmail(e.target.value)}
+            className="bg-gray-100 mb-5 rounded-lg px-4 py-2 border w-full text-base"
             type="email"
-            placeholder='email@example.com'
+            placeholder="email@example.com"
           />
 
-          <h3 className='text-lg font-medium mb-2'>Enter Password</h3>
-
+          <label className="block mb-2 text-sm font-medium">Password</label>
           <input
-            className='bg-[#eeeeee] mb-7 rounded-lg px-4 py-2 border w-full text-lg placeholder:text-base'
+            required
             value={password}
-            onChange={(e) => {
-              setPassword(e.target.value)
-            }}
-            required type="password"
-            placeholder='password'
+            onChange={(e) => setPassword(e.target.value)}
+            className="bg-gray-100 mb-5 rounded-lg px-4 py-2 border w-full text-base"
+            type="password"
+            placeholder="password"
           />
 
           <button
-            className='bg-[#111] text-white font-semibold mb-3 rounded-lg px-4 py-2 w-full text-lg placeholder:text-base'
-          >Login</button>
-
+            disabled={loading}
+            className={`${
+              loading ? "bg-gray-500" : "bg-black hover:bg-gray-800"
+            } text-white font-semibold rounded-lg px-4 py-2 w-full text-lg transition`}
+          >
+            {loading ? "Logging in..." : "Login"}
+          </button>
         </form>
-        <p className='text-center'>Join a fleet? <Link to='/captain-signup' className='text-blue-600'>Register as a Captain</Link></p>
-      </div>
-      <div>
-        <Link
-          to='/login'
-          className='bg-[#d5622d] flex items-center justify-center text-white font-semibold mb-5 rounded-lg px-4 py-2 w-full text-lg placeholder:text-base'
-        >Sign in as User</Link>
-      </div>
-    </div>
-  )
-}
 
-export default Captainlogin
+        {/* Links */}
+        <p className="text-center text-sm mt-4">
+          Join a fleet?{" "}
+          <Link to="/captain-signup" className="text-blue-600 hover:underline">
+            Register as a Captain
+          </Link>
+        </p>
+      </div>
+
+      {/* Switch to User Login */}
+      <Link
+        to="/login"
+        className="bg-orange-600 hover:bg-orange-700 flex items-center justify-center text-white font-semibold mt-6 rounded-lg px-4 py-2 w-full max-w-md text-lg transition"
+      >
+        Sign in as User
+      </Link>
+    </div>
+  );
+};
+
+export default CaptainLogin;

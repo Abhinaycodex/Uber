@@ -1,14 +1,12 @@
 import { useState, useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { UserDataContext } from "../context/UserContext";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const UserLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  const {  setUser } = useContext(UserDataContext);
+  const { setUser } = useContext(UserDataContext);
   const navigate = useNavigate();
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -16,10 +14,7 @@ const UserLogin = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
 
-    const userData = {
-      email: email,
-      password: password,
-    };
+    const userData = { email, password };
 
     setLoading(true);
     setError(null);
@@ -29,87 +24,95 @@ const UserLogin = () => {
         `${import.meta.env.VITE_BASE_URL}/users/login`,
         userData
       );
+
+      if (response.status === 200) {
+        const data = response.data;
+        setUser(data.user);
+        localStorage.setItem("token", data.token);
+        navigate("/home");
+      }
     } catch (err) {
       console.error(err);
       setError("Login failed. Please check your credentials.");
+    } finally {
       setLoading(false);
     }
-
-    if (response.status === 200) {
-      const data = response.data;
-      setUser(data.user);
-      localStorage.setItem("token", data.token);
-      navigate("/home");
-    }
-
-    setEmail("");
-    setPassword("");
   };
 
   return (
-    <div className="p-7 h-screen flex flex-col justify-between">
-      <div>
-        <img
-          className="w-16 mb-10"
-          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYQy-OIkA6In0fTvVwZADPmFFibjmszu2A0g&s"
-          alt=""
-        />
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50">
+      {/* Card */}
+      <div className="bg-white shadow-xl rounded-2xl w-full max-w-md p-8">
+        {/* Logo */}
+        <div className="flex justify-center mb-6">
+          <img
+            className="w-20"
+            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYQy-OIkA6In0fTvVwZADPmFFibjmszu2A0g&s"
+            alt="Uber Logo"
+          />
+        </div>
 
-        <form
-          onSubmit={(e) => {
-            submitHandler(e);
-          }}
-        >
-          <h3 className="text-lg font-medium mb-2">Email Id</h3>
+        {/* Title */}
+        <h2 className="text-2xl font-bold text-center mb-6">Welcome Back</h2>
+
+        {/* Error Alert */}
+        {error && (
+          <div className="bg-red-100 text-red-600 p-3 rounded-lg mb-4 text-sm text-center">
+            {error}
+          </div>
+        )}
+
+        {/* Form */}
+        <form onSubmit={submitHandler}>
+          <label className="block mb-2 text-sm font-medium">Email</label>
           <input
             required
             value={email}
-            onChange={(e) => {
-              setEmail(e.target.value);
-            }}
-            className="bg-[#eeeeee] mb-7 rounded-lg px-4 py-2 border w-full text-lg placeholder:text-base"
+            onChange={(e) => setEmail(e.target.value)}
+            className="bg-gray-100 mb-5 rounded-lg px-4 py-2 border w-full text-base"
             type="email"
             placeholder="email@example.com"
           />
 
-          <h3 className="text-lg font-medium mb-2">Enter Password</h3>
-
+          <label className="block mb-2 text-sm font-medium">Password</label>
           <input
-            className="bg-[#eeeeee] mb-7 rounded-lg px-4 py-2 border w-full text-lg placeholder:text-base"
-            value={password}
-            onChange={(e) => {
-              setPassword(e.target.value);
-            }}
             required
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="bg-gray-100 mb-5 rounded-lg px-4 py-2 border w-full text-base"
             type="password"
             placeholder="password"
           />
 
-          <button className="bg-[#111] text-white font-semibold mb-3 rounded-lg px-4 py-2 w-full text-lg placeholder:text-base">
-            Login
+          <button
+            disabled={loading}
+            className={`${
+              loading ? "bg-gray-500" : "bg-black hover:bg-gray-800"
+            } text-white font-semibold rounded-lg px-4 py-2 w-full text-lg transition`}
+          >
+            {loading ? "Logging in..." : "Login"}
           </button>
         </form>
-        <p className="text-center">
+
+        {/* Links */}
+        <p className="text-center text-sm mt-4">
           New here?{" "}
-          <Link to="/ " className="text-blue-600">
+          <Link to="/" className="text-blue-600 hover:underline">
             Create new Account
           </Link>
         </p>
-      </div>
 
-      
-      <div>
         <Link
           to="/captain-login"
-          className="bg-[#10b461] flex items-center justify-center text-white font-semibold mb-5 rounded-lg px-4 py-2 w-full text-lg placeholder:text-base"
+          className="bg-green-600 hover:bg-green-700 flex items-center justify-center text-white font-semibold mt-5 rounded-lg px-4 py-2 w-full text-lg transition"
         >
           Sign in as Captain
         </Link>
       </div>
-      <div className="bg-gray-100 p-4 text-center">
-        <p className="text-sm text-gray-600">
-          © 2023 Uber Clone. All rights reserved.
-        </p>
+
+      {/* Footer */}
+      <div className="text-center text-gray-500 text-sm mt-6">
+        © {new Date().getFullYear()} Uber Clone. All rights reserved.
       </div>
     </div>
   );
